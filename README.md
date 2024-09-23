@@ -11,9 +11,9 @@ Y - желтый.
 Рекомендуемый размер сетки: не более, чем 10х13.
 
 Для каждого уровня создавать отдельный файл, именуя каждый, используя общую для всех файлов часть, которую необходимо указать в поле Matrix File Name в том же скрипте, и добавляя к ней номер уровня, например:
-gridMatrixLevel_1
-gridMatrixLevel_2
-gridMatrixLevel_3
+gridMatrixLevel_1,
+gridMatrixLevel_2,
+gridMatrixLevel_3.
 
-Файлы хранить в папке Assets/Resources/LevelGridMatrices
+Файлы хранить в папке Assets/Resources/LevelGridMatrices.
 		 
