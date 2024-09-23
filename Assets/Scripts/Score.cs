@@ -1,21 +1,19 @@
 using UnityEngine;
-using UnityEngine.Events;
+using System;
 
 public class Score : MonoBehaviour
 {
     private int _count;
     private string _countFileName;
 
-    public UnityEvent OnCountChanged;
-
-    public int Count => _count;
+    public event Action<int> OnCountChanged;
 
     private void Start()
     {
         _countFileName = gameObject.name;
 
         _count = PlayerPrefs.GetInt(_countFileName);
-        OnCountChanged?.Invoke();
+        OnCountChanged?.Invoke(_count);
     }
 
     public void Add(int volume)
@@ -23,7 +21,7 @@ public class Score : MonoBehaviour
         _count += volume;
 
         PlayerPrefs.SetInt(_countFileName, _count);
-        OnCountChanged?.Invoke();
+        OnCountChanged?.Invoke(_count);
     }
 
     public bool TryRemove(int volume)
@@ -36,7 +34,7 @@ public class Score : MonoBehaviour
         _count -= volume;
 
         PlayerPrefs.SetInt(_countFileName, _count);
-        OnCountChanged?.Invoke();
+        OnCountChanged?.Invoke(_count);
 
         return true;
     }

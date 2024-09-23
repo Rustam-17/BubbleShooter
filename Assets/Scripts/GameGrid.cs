@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameGrid
+public class GameGrid: MonoBehaviour
 {
-    private int _height;
     private int _width;
+    private int _height;
 
     private Ball[,] _balls;
 
-    public GameGrid(int height, int width)
+    public void SetSize(int width, int height)
     {
-        _height = height;
         _width = width;
+        _height = height;
 
-        _balls = new Ball[_height, _width];
+        _balls = new Ball[_width, _height];
     }
 
     public void Add(Ball ball, int ballPositionX, int ballPositionY)

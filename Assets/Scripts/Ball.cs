@@ -1,23 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public enum Color
-{
-    Red,
-    Green,
-    Yellow,
-    Cian
-}
 
 public class Ball : MonoBehaviour
 {
-    private Color _color;
+    [SerializeField] private Rigidbody2D _rigidbody;
 
-    public Color Color => _color;
+    private BallColor _color;
 
-    public void SetColor(Color color)
+    public BallColor Color => _color;
+
+    public void SetColor(BallColor color)
     {
         _color = color;
+    }
+
+    public void Shoot(Vector2 force)
+    {
+        _rigidbody.bodyType = RigidbodyType2D.Dynamic;
+        _rigidbody.velocity = force;
     }
 }

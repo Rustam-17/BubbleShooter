@@ -8,18 +8,16 @@ public class ScoreViewer : MonoBehaviour
 
     private void OnEnable()
     {
-        UpdateScore();
-
-        _score.OnCountChanged.AddListener(UpdateScore);
+        _score.OnCountChanged += UpdateScore;
     }
 
     private void OnDisable()
     {
-        _score.OnCountChanged.RemoveListener(UpdateScore);
+        _score.OnCountChanged -= UpdateScore;
     }
 
-    private void UpdateScore()
+    private void UpdateScore(int count)
     {
-        _countText.text = _score.Count.ToString();
+        _countText.text = count.ToString();
     }
 }
