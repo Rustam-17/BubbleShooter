@@ -1,22 +1,22 @@
 using TMPro;
 using UnityEngine;
 
-public class ScoreViewer : MonoBehaviour
+public class CountViewer : MonoBehaviour
 {
-    [SerializeField] private Score _score;
+    [SerializeField] private Count _count;
     [SerializeField] private TMP_Text _countText;
 
     private void OnEnable()
     {
-        _score.OnCountChanged += UpdateScore;
+        _count.OnCountChanged += UpdateCount;
     }
 
     private void OnDisable()
     {
-        _score.OnCountChanged -= UpdateScore;
+        _count.OnCountChanged -= UpdateCount;
     }
 
-    private void UpdateScore(int count)
+    private void UpdateCount(int count)
     {
         _countText.text = count.ToString();
     }

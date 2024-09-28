@@ -3,15 +3,16 @@ using System;
 
 public class BallShooter : MonoBehaviour
 {
-    [SerializeField] private BallCreator _ballCreator;
     [SerializeField] private BallTrajectoryRenderer _ballTrajectoryRenderer;
-    [SerializeField] private float _shootForce = 10f;
+    [SerializeField] private BallsStock _ballsStock;
+    [SerializeField] private float _shootForce;
+    [SerializeField] private float _chargeSpeed;
 
     private Ball _ball;
     private Vector2 _dragStart;
     private Vector2 _dragDirection;
     private Vector2 _ballPosition;
-    private bool _isDragging = false;
+    private bool _isDragging;
 
     public event Action OnShoot;
 
@@ -19,7 +20,7 @@ public class BallShooter : MonoBehaviour
 
     private void Start()
     {
-        _ball = _ballCreator.CreateBulletBall(transform.position);
+        Charge();
     }
 
     private void Update()
@@ -71,8 +72,19 @@ public class BallShooter : MonoBehaviour
     private void ShootBall()
     {
         _ball.Shoot(DragForce);
-        //_ball = _ballCreator.CreateBulletBall(transform.position);
-
         OnShoot?.Invoke();
+
+        Charge();
+    }
+
+    private void Charge()
+    {
+        if (_ballsStock.TryGetBall(out Ball ball) == false)
+        {
+            return;
+        }
+
+        _ball = ball;
+        _ball.ChargeBallShooter(transform, _chargeSpeed);
     }
 }

@@ -40,9 +40,9 @@ public class BallCreator : MonoBehaviour
         return _ball;
     }
 
-    public Ball CreateBulletBall(Vector2 position)
+    public Ball CreateRandomBulletBall(Vector2 position, Transform ballStockTransform)
     {
-        _ballObject = Instantiate(_ballPrefab, position, Quaternion.identity);
+        _ballObject = Instantiate(_ballPrefab, position, Quaternion.identity, ballStockTransform);
 
         _ball = _ballObject.GetComponent<Ball>();
         _ball.SetColor(GetRandomBallColor());
