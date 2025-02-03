@@ -5,22 +5,29 @@ public class BallShooter : MonoBehaviour
 {
     [SerializeField] private BallTrajectoryRenderer _ballTrajectoryRenderer;
     [SerializeField] private BallsStock _ballsStock;
-    [SerializeField] private float _shootForce;
-    [SerializeField] private float _chargeSpeed;
+    [SerializeField] private float _shootSpeed;
+    [SerializeField] private float _chargeDuration;
+    [SerializeField] private int _trajectoryPointsCount;
+    [SerializeField] private float _trajectoryTimeStep;
 
+    private TrajectoryCalculator _trajectoryCalculator;
     private Ball _ball;
     private Vector2 _dragStart;
     private Vector2 _dragDirection;
     private Vector2 _ballPosition;
     private bool _isDragging;
+    private float _ballRadius;
 
     public event Action OnShoot;
 
-    private Vector2 DragForce => _dragDirection * _shootForce;
+    private Vector2 DragForce => _dragDirection * _shootSpeed;
 
     private void Start()
     {
         Charge();
+
+        _ballRadius = GetBallRadius();
+        _trajectoryCalculator = new TrajectoryCalculator(_trajectoryPointsCount, _trajectoryTimeStep, _ballRadius);
     }
 
     private void Update()
@@ -38,7 +45,7 @@ public class BallShooter : MonoBehaviour
 
             _dragDirection = _dragStart - currentMousePosition;
             _ballPosition = _ball.transform.position;
-
+            
             DrawBallTrajectory();
         }
 
@@ -61,7 +68,7 @@ public class BallShooter : MonoBehaviour
 
     private void DrawBallTrajectory()
     {
-        _ballTrajectoryRenderer.DrawTrajectory(_dragDirection, _ballPosition);
+        _ballTrajectoryRenderer.DrawTrajectory(_trajectoryCalculator.GetTrajectoryPoints(_ballPosition, DragForce));
     }
 
     private void ClearBallTrajectory()
@@ -71,7 +78,7 @@ public class BallShooter : MonoBehaviour
 
     private void ShootBall()
     {
-        _ball.Shoot(DragForce);
+        _ball.Shoot(_trajectoryCalculator.GetTrajectoryPoints(_ballPosition, DragForce), _trajectoryTimeStep);
         OnShoot?.Invoke();
 
         Charge();
@@ -85,6 +92,11 @@ public class BallShooter : MonoBehaviour
         }
 
         _ball = ball;
-        _ball.ChargeBallShooter(transform, _chargeSpeed);
+        _ball.ChargeBallShooter(transform, _chargeDuration);
+    }
+
+    private float GetBallRadius()
+    {
+        return _ball.GetComponent<SpriteRenderer>().bounds.size.x / 2;
     }
 }

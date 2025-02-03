@@ -15,16 +15,15 @@ public class Ball : MonoBehaviour
         _color = color;
     }
 
-    public void Shoot(Vector2 force)
+    public void Shoot(Vector2[] points, float timeStep)
     {
-        _rigidbody.bodyType = RigidbodyType2D.Dynamic;
-        _rigidbody.velocity = force;
+        _movement.Move(points, timeStep);
     }
 
-    public void ChargeBallShooter(Transform ballSooterTransform, float chargeSpeed)
+    public void ChargeBallShooter(Transform ballSooterTransform, float chargeDuration)
     {
         transform.SetParent(ballSooterTransform);
 
-        _movement.Move(ballSooterTransform.position, chargeSpeed);
+        _movement.Move(ballSooterTransform.position, chargeDuration);
     }
 }

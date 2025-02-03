@@ -2,34 +2,60 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
-    private Vector2 _startPosition;
-    private Vector2 _targetPosition;
-    private float _speed;
-    private float _moveProgress;
+    private Vector2[] _trajectoryPoints;
+    private Vector2 _startPoint;
+    private int _currentPointIndex;
+    private float _timeStep;
+    private float _elapsedTime;
+    private float _elapsedTimeFraction;
     private bool _isMoving;
 
-    void Update()
-    {        
+    void FixedUpdate()
+    {
         if (_isMoving)
         {
-            transform.position = Vector3.Lerp(_startPosition, _targetPosition, _moveProgress);
+            _elapsedTime += Time.fixedDeltaTime;
+            _elapsedTimeFraction = _elapsedTime / _timeStep;
 
-            _moveProgress += Time.deltaTime * _speed;
+            transform.position = Vector2.Lerp(_startPoint, _trajectoryPoints[_currentPointIndex], _elapsedTimeFraction);
 
-            if (_moveProgress >= 1f)
+            if (_elapsedTimeFraction >= 1)            
             {
-                transform.position = _targetPosition;
+                _currentPointIndex++;
+                _elapsedTime = 0;
+                _startPoint = transform.position;
+            }
+
+            if (_currentPointIndex >= _trajectoryPoints.Length)
+            {
                 _isMoving = false;
             }
         }
     }
 
-    public void Move(Vector2 targetPosition, float chargeSpeed)
+    public void Move(Vector2[] points, float timeStep)
     {
-        _startPosition = transform.position;
-        _targetPosition = targetPosition;
-        _speed = chargeSpeed;
-        _moveProgress = 0f;
+        _trajectoryPoints = points;
+
+        _currentPointIndex = 0;
         _isMoving = true;
+
+        _timeStep = timeStep;
+        _elapsedTime = 0;
+
+        _startPoint = transform.position;
+    }
+
+    public void Move(Vector2 targetPoint, float duration)
+    {
+        _trajectoryPoints = new Vector2[] { targetPoint };
+
+        _currentPointIndex = 0;
+        _isMoving = true;
+
+        _timeStep = duration;
+        _elapsedTime = 0;
+
+        _startPoint = transform.position;
     }
 }

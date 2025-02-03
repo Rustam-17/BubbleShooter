@@ -3,8 +3,6 @@ using UnityEngine;
 public class BallTrajectoryRenderer : MonoBehaviour
 {
     [SerializeField] private LineRenderer _trajectoryLine;
-    [SerializeField] private Color _trajectoryLineColor;
-    [SerializeField] private Color _spreadLineColor;
 
     private Vector2 _trajectoryEnd;
 
@@ -15,6 +13,16 @@ public class BallTrajectoryRenderer : MonoBehaviour
         _trajectoryLine.positionCount = 2;
         _trajectoryLine.SetPosition(0, _trajectoryStart);
         _trajectoryLine.SetPosition(1, _trajectoryEnd);
+    }
+
+    public void DrawTrajectory(Vector2[] points)
+    {
+        _trajectoryLine.positionCount = points.Length;
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            _trajectoryLine.SetPosition(i, points[i]);
+        }
     }
 
     public void Clear()
