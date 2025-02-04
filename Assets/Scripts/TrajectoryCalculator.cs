@@ -4,6 +4,7 @@ public class TrajectoryCalculator
 {
     private const float GRAVITY = 9.8f;
 
+    private GameGrid _gameGrid;
     private Vector2[] _trajectoryPoints;
     private int _numPoints;
     private float _timeStep;
@@ -12,8 +13,9 @@ public class TrajectoryCalculator
     private float _ceilingY;
     private float _reflectionEnergyLoss = 0.7f;
 
-    public TrajectoryCalculator(int numPoints, float timeStep, float ballRadius)
+    public TrajectoryCalculator(GameGrid gameGrid, int numPoints, float timeStep, float ballRadius)
     {
+        _gameGrid = gameGrid;
         _numPoints = numPoints;
         _timeStep = timeStep;
         _trajectoryPoints = new Vector2[numPoints];
@@ -40,8 +42,8 @@ public class TrajectoryCalculator
         Vector2 bottomLeft = Camera.main.ScreenToWorldPoint(Vector2.zero);
         Vector2 topRight = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
 
-        _leftWallX = bottomLeft.x;// + ballRadius;
-        _rightWallX = topRight.x;// - ballRadius;
+        _leftWallX = bottomLeft.x + ballRadius;
+        _rightWallX = topRight.x - ballRadius;
         _ceilingY = topRight.y - ballRadius;
     }
 
@@ -49,9 +51,16 @@ public class TrajectoryCalculator
     {        
         Vector2 currentPosition = startPosition;
         Vector2 currentVelocity = initialVelocity;
+        bool collisionDetected = false;
 
         for (int i = 0; i < _numPoints; i++)
         {
+            if (collisionDetected)
+            {
+                _trajectoryPoints[i] = currentPosition;
+                continue;
+            }
+
             Vector2 newPosition = currentPosition + currentVelocity * _timeStep;
             Vector2 newVelocity = currentVelocity;
 
@@ -75,6 +84,14 @@ public class TrajectoryCalculator
             }
 
             _trajectoryPoints[i] = newPosition;
+
+            Vector2Int? collisionCell = _gameGrid.CheckCollision(newPosition);
+
+            if (collisionCell.HasValue)
+            {
+                collisionDetected = true;
+                currentPosition = _gameGrid.GetCellWorldPosition(collisionCell.Value);
+            }
 
             currentPosition = newPosition;
             currentVelocity = newVelocity;

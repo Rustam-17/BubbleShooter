@@ -1470,6 +1470,7 @@ MonoBehaviour:
   _chargeDuration: 0.2
   _trajectoryPointsCount: 300
   _trajectoryTimeStep: 0.02
+  _gameGrid: {fileID: 312096374}
 --- !u!4 &1940114977
 Transform:
   m_ObjectHideFlags: 0

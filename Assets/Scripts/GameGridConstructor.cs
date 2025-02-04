@@ -64,7 +64,7 @@ public class GameGridConstructor : MonoBehaviour
         int gridWidth = GetGameGridWidth();
 
         _absoluteGridWidth = (gridWidth - 1) * _ballSize * _spacing;
-        _gameGrid.SetSize(gridWidth, gridHeight);
+        _gameGrid.SetParameters(gridWidth, gridHeight, _hexHeightFactor, _ballSize, _spacing);
 
         for (int y = 0; y < gridHeight; y++)
         {

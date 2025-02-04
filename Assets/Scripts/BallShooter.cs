@@ -9,6 +9,7 @@ public class BallShooter : MonoBehaviour
     [SerializeField] private float _chargeDuration;
     [SerializeField] private int _trajectoryPointsCount;
     [SerializeField] private float _trajectoryTimeStep;
+    [SerializeField] private GameGrid _gameGrid;
 
     private TrajectoryCalculator _trajectoryCalculator;
     private Ball _ball;
@@ -27,7 +28,7 @@ public class BallShooter : MonoBehaviour
         Charge();
 
         _ballRadius = GetBallRadius();
-        _trajectoryCalculator = new TrajectoryCalculator(_trajectoryPointsCount, _trajectoryTimeStep, _ballRadius);
+        _trajectoryCalculator = new TrajectoryCalculator(_gameGrid, _trajectoryPointsCount, _trajectoryTimeStep, _ballRadius);
     }
 
     private void Update()
